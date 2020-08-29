@@ -1,14 +1,19 @@
-class WhatsAppController {
+import Format from '../util/Format'
+import CameraController from './CameraController'
+
+export default class WhatsAppController {
 
   constructor() {
     console.log("WhatsAppController Ok")
 
-    this.elementsPrototype()
-    this.loadElements()
-    this.initEvents()
+    this.elementsPrototype() // Create methods for native elements like a jQuery
+    this.loadElements() // Create a object with all elements of document
+    this.initEvents() // Create event for all buttons and inputs in document
   }
 
   loadElements() {
+    
+    /* Transform all ids in camelCase attributes of a object el */
 
     this.el = {}
 
@@ -18,6 +23,9 @@ class WhatsAppController {
   }
 
   elementsPrototype() {
+
+    /* This method create a jQuery like features  */
+
     Element.prototype.hide = function () {
       this.style.display = 'none'
       return this
@@ -80,6 +88,7 @@ class WhatsAppController {
   }
 
   initEvents() {
+
     this.el.myPhoto.on('click', e => {
       this.closeAllLeftPanel()
       this.el.panelEditProfile.show()
@@ -167,10 +176,30 @@ class WhatsAppController {
     this.el.btnClosePanelCamera.on('click', e => {
       this.closeAllMainPanel()
       this.el.panelMessagesContainer.show()
+      this._camera.stop()
     })
 
     this.el.btnTakePicture.on('click', e => {
-      console.log('take picture')
+      let dataUrl = this._camera.takePicture()
+
+      this.el.pictureCamera.src = dataUrl
+      this.el.pictureCamera.show()
+      this.el.videoCamera.hide()
+      this.el.btnReshootPanelCamera.show()
+      this.el.containerTakePicture.hide()
+      this.el.containerSendPicture.show()
+    })
+
+    this.el.btnReshootPanelCamera.on('click', e => {
+      this.el.pictureCamera.hide()
+      this.el.videoCamera.show()
+      this.el.btnReshootPanelCamera.hide()
+      this.el.containerTakePicture.show()
+      this.el.containerSendPicture.hide()
+    })
+
+    this.el.btnSendPicture.on('click', e => {
+      console.log(this.el.pictureCamera.src)
     })
 
     this.el.btnAttachDocument.on('click', e => {
@@ -281,9 +310,9 @@ class WhatsAppController {
     })
 
 
-
-
   }
+
+  /* Public methods */
 
   startRecordMicrophoneTime() {
     let start = Date.now()
