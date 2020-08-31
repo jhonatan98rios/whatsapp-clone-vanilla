@@ -37,9 +37,45 @@ export default class DocumentPreviewController{
 
                     reader.onload = e => {
 
+                        /*
+
+                        // This function is not working, I need fix this
+
+                        async
+                        let pdf = await pdfjsLib.getDocument(new Uint8Array(reader.result)).promise
+                        
+                        */
+
                         pdfjsLib.getDocument(new Uint8Array(reader.result)).then(pdf => {
 
-                            console.log('pdf', pdf)
+                            pdf.getPage(1).then( page  => {
+
+                                let viewport = page.getViewPort(1)
+                                let canvas = document.createElement('canvas')
+                                let canvasContext = canvas.getContext('2d')
+
+                                canvas.width = viewport.width
+                                canvas.height = viewport.height
+
+                                page.render({
+                                    canvasContext,
+                                    viewport 
+                                }).then(() => {
+
+                                    let _s = pdf.numPages > 1 ? 's' : ''
+
+                                    s({
+                                        src: canvas.toDataURL('image/png'),
+                                        info: `${pdf.numPages} página${_s}`
+                                    })
+
+                                }).catch( err => {
+                                    f(err)
+                                })
+
+                            }).catch( err => {
+                                f(err)
+                            })
 
                         }).catch( err => {
                             f(err)
