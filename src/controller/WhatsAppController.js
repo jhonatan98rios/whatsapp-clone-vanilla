@@ -2,15 +2,34 @@ import Format from '../util/Format'
 import CameraController from './CameraController'
 import MicrophoneController from './MicrophoneController'
 import DocumentPreviewController from './DocumentPreviewController'
+import Firebase from '../util/Firebase'
 
 export default class WhatsAppController {
 
   constructor() {
     console.log("WhatsAppController Ok")
 
+    this._firebase = new Firebase()
+    this.initAuth()
     this.elementsPrototype() // Create methods for native elements like a jQuery
     this.loadElements() // Create a object with all elements of document
     this.initEvents() // Create event for all buttons and inputs in document
+    
+  }
+
+  initAuth(){
+    this._firebase.initAuth()
+      .then( response => {
+
+        this._user = response.user
+        this.el.appContent.css({
+          display: 'flex'
+        })
+
+      }).catch(err => {
+        console.log(err)
+
+      })
   }
 
   loadElements() {
