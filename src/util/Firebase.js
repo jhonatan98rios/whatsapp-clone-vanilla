@@ -25,7 +25,7 @@ export default class Firebase {
             firebase.initializeApp(this._config);
 
             firebase.firestore().settings({
-                timestampsInSnapshots: true
+                //timestampsInSnapshots: true
             })
 
             window._initializedFirebase = true
