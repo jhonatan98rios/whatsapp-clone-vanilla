@@ -60,9 +60,10 @@ export default class User extends Model {
             .set(contact.toJSON())
     }
 
-    getContacts(){
+    getContacts(filter = ''){
         return new Promise((s,f) => {
-            User.getContactsRef(this.email).onSnapshot(docs => {
+
+            User.getContactsRef(this.email).where('name', '>=', filter).onSnapshot(docs => {
                 let contacts = []
 
                 docs.forEach( doc => {
@@ -76,6 +77,9 @@ export default class User extends Model {
                 s(contacts)
 
             })
+
+            console.log(filter)
+
         })
     }
 }

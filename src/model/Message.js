@@ -308,8 +308,6 @@ export default class Message extends Model {
 
         let className = (me) ? 'message-out' :'message-in'
 
-        console.log(div)
-
         div.firstElementChild.classList.add(className)
 
         return div

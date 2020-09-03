@@ -59,8 +59,6 @@ export default class MicrophoneController extends ClassEvent{
                     lastModified: Date.now()
                 })
 
-                console.log(file)
-
                 let reader = new FileReader()
                 reader.onload = e => {
                     let audio = new Audio(reader.result)
