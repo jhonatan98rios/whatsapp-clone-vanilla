@@ -1,7 +1,7 @@
 import Firebase from "../util/Firebase";
 import Model from "./Model";
 
-export class User extends Model {
+export default class User extends Model {
 
     constructor(id){
         super()
@@ -19,6 +19,9 @@ export class User extends Model {
 
     get photo(){ return this._data.photo }
     set photo(value){ this._data.photo = value }
+
+    get chatId(){ return this._data.chatId }
+    set chatId(value){ this._data.chatId = value }
 
     /*  */
 
@@ -52,7 +55,7 @@ export class User extends Model {
     }
 
     addContact(contact){
-        User.getContactsRef(this.email)
+        return User.getContactsRef(this.email)
             .doc(btoa(contact.email)) //base64
             .set(contact.toJSON())
     }
