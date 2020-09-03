@@ -78,8 +78,6 @@ export default class User extends Model {
 
             })
 
-            console.log(filter)
-
         })
     }
 }

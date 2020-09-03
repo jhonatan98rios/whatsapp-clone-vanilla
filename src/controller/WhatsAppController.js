@@ -175,39 +175,56 @@ export default class WhatsAppController {
 
     this.el.panelMessagesContainer.innerHTML = ""
 
-    Message.getRef(this._contactActive.chatId).orderBy('timeStamp')
-      .onSnapshot(docs => {
+    Message.getRef(this._contactActive.chatId).orderBy('timeStamp').onSnapshot(docs => {
 
-        let scrollTop = this.el.panelMessagesContainer.scrollTop
-        let scrollTopMax = (this.el.panelMessagesContainer.scrollHeight - this.el.panelMessagesContainer.offsetHeight)
-        let autoScroll = (scrollTop >= scrollTopMax)
+      let scrollTop = this.el.panelMessagesContainer.scrollTop
+      let scrollTopMax = (this.el.panelMessagesContainer.scrollHeight - this.el.panelMessagesContainer.offsetHeight)
+      let autoScroll = (scrollTop >= scrollTopMax)
 
-        docs.forEach( doc => {
-          
-          let data = doc.data()
-          data.id = doc.id
+      docs.forEach( doc => {
+        
+        let data = doc.data()
+        data.id = doc.id
 
-          if(!this.el.panelMessagesContainer.querySelector('#_'+ data.id)){
+        let message = new Message()
+        message.fromJSON(data)
 
-            let message = new Message()
-            message.fromJSON(data)
-            
-            let me = (data.from === this._user.email)
-            let view = message.getViewElement(me)
-            
-            this.el.panelMessagesContainer.appendChild(view)
+        /*  */
 
+        let me = (data.from === this._user.email)
+
+        if(!this.el.panelMessagesContainer.querySelector('#_'+ data.id)){  
+
+          if(!me){
+
+            doc.ref.set({
+              status: 'read'
+            },{
+              merge: true
+            })
           }
+          
+          let view = message.getViewElement(me)
+          
+          this.el.panelMessagesContainer.appendChild(view)
 
-        })
+        }else if(me) {
 
-        if (autoScroll){
-          this.el.panelMessagesContainer.scrollTop = this.el.panelMessagesContainer.scrollHeight - this.el.panelMessagesContainer.offsetHeight
-        }else {
-          this.el.panelMessagesContainer.scrollTop = scrollTop
+          let msgEL = this.el.panelMessagesContainer.querySelector('#_'+ data.id)
+
+          msgEL.querySelector('.message-status').innerHTML = message.getStatusViewElememnt().outerHTML
+
         }
 
       })
+
+      if (autoScroll){
+        this.el.panelMessagesContainer.scrollTop = this.el.panelMessagesContainer.scrollHeight - this.el.panelMessagesContainer.offsetHeight
+      }else {
+        this.el.panelMessagesContainer.scrollTop = scrollTop
+      }
+
+    })
   }
 
   loadElements() {
