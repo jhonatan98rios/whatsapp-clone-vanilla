@@ -20,7 +20,6 @@ export default class Format {
     } else {
       return `${minutes}:${seconds.toString().padStart(2, '0')}`
     }
-
   }
 
   static dateToTime(date, locale = 'pt-BR'){
