@@ -9,10 +9,12 @@ export default class Firebase {
             authDomain: "whatsapp-clone-vanilla-js.firebaseapp.com",
             databaseURL: "https://whatsapp-clone-vanilla-js.firebaseio.com",
             projectId: "whatsapp-clone-vanilla-js",
-            storageBucket: "whatsapp-clone-vanilla-js.appspot.com",
+            storageBucket: "gs://whatsapp-clone-vanilla-js.appspot.com",
             messagingSenderId: "1070866144923",
             appId: "1:1070866144923:web:2d8bbd2bab42997367303e"
         };
+
+        // whatsapp-clone-vanilla-js.appspot.com
 
         this.init()
     }
