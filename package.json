@@ -20,7 +20,7 @@
   "homepage": "https://github.com/jhonatan98rios/whatsapp-clone-vanilla#readme",
   "dependencies": {
     "firebase": "^7.19.1",
-    "pdfjs-dist": "^2.4.456",
+    "pdfjs-dist": "^2.0.489",
     "webpack": "^3.1.0",
     "webpack-dev-server": "^2.5.1"
   }

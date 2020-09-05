@@ -324,16 +324,6 @@ export default class Message extends Model {
             err => { f() }, 
             () => { s(uploadTask.snapshot) })
         })
-
-        /* 
-            uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                console.log("File available at", downloadURL);
-                Message.send(chatId, from, 'image', downloadURL).then(()=>{
-                    s()
-                })
-            });
-        */
-
     }
 
     static sendDocument(chatId, from, file, filePreview, info){
@@ -342,42 +332,41 @@ export default class Message extends Model {
     
             Message.upload(file, from).then( snapshot =>{
 
-                let downloadFile = snapshot.downloadURL
-
-                if(filePreview){
-
-                    Message.upload(filePreview, from).then( snapshot2 =>{
+                snapshot.ref.getDownloadURL().then( downloadFile => {
+                    
+                    if(false){
     
-                        let downloadPreview = snapshot2.downloadURL
+                        Message.upload(filePreview, from).then( snapshot2 =>{
+
+                            snapshot2.ref.getDownloadURL().then(downloadPreview => {
+                                
+                                msgRef.set({
+                                    content: downloadFile,
+                                    preview: downloadPreview,
+                                    filename: file.name,
+                                    size: file.size,
+                                    fileType: file.type,
+                                    status: 'sent',
+                                    info
+                                },{
+                                    merge: true
+                                })                        
+                            });
+                        })
+                    }else{
     
                         msgRef.set({
                             content: downloadFile,
-                            preview: downloadPreview,
-                            filename: file.namem,
+                            filename: file.name,
                             size: file.size,
                             fileType: file.type,
-                            status: 'sent',
-                            info
+                            status: 'sent'
                         },{
                             merge: true
-                        })                        
-                    })
-                }else{
-
-                    msgRef.set({
-                        content: downloadFile,
-                        filename: file.namem,
-                        size: file.size,
-                        fileType: file.type,
-                        status: 'sent'
-                    },{
-                        merge: true
-                    })
-
-                }
-
-            })
-            
+                        })
+                    }
+                });
+            })            
         })
     }
 
@@ -388,17 +377,24 @@ export default class Message extends Model {
 
             Message.upload(file, from).then( snapshot =>{
 
-                Message.send(
+                /* Message.send(
                     chatId, 
                     from, 
                     'image', 
                     snapshot.downloadURL
                 ).then(()=>{
                     s()
-                })
+                }) */
 
+                
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    
+                    //console.log("File available at", downloadURL);
+                    Message.send(chatId, from, 'image', downloadURL).then(()=>{
+                        s()
+                    })
+                });
             })
-
         })
     }
 

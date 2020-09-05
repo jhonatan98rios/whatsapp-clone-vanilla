@@ -550,6 +550,7 @@ export default class WhatsAppController {
                 let file = this.el.inputDocument.files[0]
 
                 this._documentPreviewController = new DocumentPreviewController(file)
+
                 this._documentPreviewController.getPreviewData().then(result => {
 
                     this.el.imgPanelDocumentPreview.src = result.src
@@ -562,6 +563,9 @@ export default class WhatsAppController {
                     })
 
                 }).catch(err => {
+
+                    console.log('>>>>')
+                    console.log(err)
 
                     this.el.panelDocumentPreview.css({
                         'height': 'calc(100% - 120px)'
@@ -607,7 +611,7 @@ export default class WhatsAppController {
         this.el.btnSendDocument.on('click', e => {
 
             let file = this.el.inputDocument.files[0]
-            let bae64 = this.el.imgPanelDocumentPreview.src
+            let base64 = this.el.imgPanelDocumentPreview.src
 
             if (file.type === 'application/pdf'){
 

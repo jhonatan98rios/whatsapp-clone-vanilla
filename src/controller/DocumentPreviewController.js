@@ -35,46 +35,44 @@ export default class DocumentPreviewController{
 
                 case 'application/pdf':
 
-                    reader.onload = e => {
-
-                        /*
+                    reader.onload = async e => {
 
                         // This function is not working, I need fix this
 
-                        async
                         let pdf = await pdfjsLib.getDocument(new Uint8Array(reader.result)).promise
                         
-                        */
+                        pdf.getPage(1).then( page  => {
 
-                        pdfjsLib.getDocument(new Uint8Array(reader.result)).then(pdf => {
+                            let viewport = {
+                                height: 540,
+                                offsetX: 0,
+                                offsetY: 0,
+                                rotation: 0,
+                                scale: 1,
+                                transform: [1, 0, 0, -1, 0, 540],
+                                viewBox: [0,0,960,540],
+                                width: 960
+                            }
 
-                            pdf.getPage(1).then( page  => {
+                            console.log(page)
 
-                                let viewport = page.getViewPort(1)
-                                let canvas = document.createElement('canvas')
-                                let canvasContext = canvas.getContext('2d')
+                            //let viewport = page.getViewPort({ scale: 1 })
+                            let canvas = document.createElement('canvas')
+                            let canvasContext = canvas.getContext('2d')
 
-                                canvas.width = viewport.width
-                                canvas.height = viewport.height
+                            canvas.width = viewport.width
+                            canvas.height = viewport.height
 
-                                page.render({
-                                    canvasContext,
-                                    viewport 
-                                }).then(() => {
+                            page.render({
+                                canvasContext,
+                                viewport 
+                            })
 
-                                    let _s = pdf.numPages > 1 ? 's' : ''
+                            let _s = pdf.numPages > 1 ? 's' : ''
 
-                                    s({
-                                        src: canvas.toDataURL('image/png'),
-                                        info: `${pdf.numPages} página${_s}`
-                                    })
-
-                                }).catch( err => {
-                                    f(err)
-                                })
-
-                            }).catch( err => {
-                                f(err)
+                            s({
+                                src: canvas.toDataURL('image/png'),
+                                info: `${pdf.numPages} página${_s}`
                             })
 
                         }).catch( err => {
