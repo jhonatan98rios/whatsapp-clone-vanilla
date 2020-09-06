@@ -1,0 +1,4 @@
+sudo npm install firebase-tools
+firebase login
+firebase init functions
+firebase deploy --only functions
